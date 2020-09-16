@@ -1,0 +1,9 @@
+version: '2.3'
+services:
+  flight-service:
+    build: .
+    ports:
+      - 8000:8000
+    environment:
+      AUTH_TOKEN: 8xjM8PF9XC7KVUQ
+      PORT: 8000
