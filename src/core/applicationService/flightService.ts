@@ -1,6 +1,7 @@
 /* eslint-disable class-methods-use-this */
 /* eslint-disable no-useless-constructor */
 import { Flights } from '@main/common/dto/flights';
+import Logger from '@main/utils/logger';
 import FlightSourceApiInterface from '../infrastructure/services/flightSourceBridges/flightSourceApiInteface';
 
 export default class FlightService {
@@ -23,13 +24,16 @@ export default class FlightService {
 
     notNullFlightDataArray.forEach(flightData => {
       flightData.forEach(flight => {
-        const uniqueKey = `${flight.slices.departureJourney.flightNumber}${flight.slices.departureJourney.departureUTC}`;
+        const uniqueKey = `${flight.slices.departureJourney.flightNumber}${flight.slices.departureJourney.departureUTC}${flight.slices.returnJourney.flightNumber}${flight.slices.returnJourney.departureUTC}`;
         if (alreadyExistingJourneyDetails.has(uniqueKey)) {
+          Logger.info(
+            `duplicate found ${flight.slices.departureJourney.flightNumber}  ${flight.slices.departureJourney.departureUTC}`,
+          );
           return;
         }
         flightDataResponse.push(flight);
         alreadyExistingJourneyDetails.set(
-          `${flight.slices.departureJourney.flightNumber}${flight.slices.departureJourney.departureUTC}`,
+          `${flight.slices.departureJourney.flightNumber}${flight.slices.departureJourney.departureUTC}${flight.slices.returnJourney.flightNumber}${flight.slices.returnJourney.departureUTC}`,
           `${flight.slices.departureJourney.flightNumber}${flight.slices.departureJourney.arrivalUTC}`,
         );
       });
@@ -41,7 +45,7 @@ export default class FlightService {
   private async getDataFromSources(): Promise<Flights[][]> {
     const dataSourcePromises = this.flightSources.map(flightDataSourceAdaper => {
       return flightDataSourceAdaper.getFlightDetails().catch(error => {
-        console.log(error);
+        Logger.error(error);
         return [] as Flights[];
       });
     });

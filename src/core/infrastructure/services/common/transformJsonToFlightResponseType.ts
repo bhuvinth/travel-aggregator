@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { validate } from 'class-validator';
 import { Flights, FlightDetails } from '@main/common/dto/flights';
+import Logger from '@main/utils/logger';
 
 async function validateFlightResponse(flightData: Flights) {
   const departureJourneyValidationResult = await validate(flightData.slices.departureJourney);
@@ -11,11 +12,11 @@ async function validateFlightResponse(flightData: Flights) {
     returnJourneyValidationResult.length ||
     flightResponseValidationResult.length
   ) {
-    console.log(
+    Logger.error({
       departureJourneyValidationResult,
       returnJourneyValidationResult,
       flightResponseValidationResult,
-    );
+    });
     return null;
   }
 

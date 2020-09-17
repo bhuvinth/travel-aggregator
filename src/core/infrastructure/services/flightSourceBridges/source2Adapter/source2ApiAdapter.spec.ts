@@ -2,7 +2,7 @@
 jest.mock('node-fetch');
 import fetch from 'node-fetch';
 import { FlightDetails, Flights } from '../../../../../common/dto/flights';
-import Source2ApiAdapter from './source2ApiAdapter';
+import SupplyPartner2ApiAdapter from './supplyPartner2ApiAdapter';
 
 const { Response } = jest.requireActual('node-fetch');
 
@@ -60,7 +60,7 @@ describe('Test Source2ApiAdapter with mocked node-fetch', () => {
     };
     // @ts-ignore
     fetch.mockReturnValue(Promise.resolve(new Response(JSON.stringify(mockJsonFlightData))));
-    const source1ApiAdapterObj = new Source2ApiAdapter();
+    const source1ApiAdapterObj = new SupplyPartner2ApiAdapter();
     const flightResponseData: Flights[] = await source1ApiAdapterObj.getFlightDetails();
     expect(flightResponseData).toBeDefined();
     expect(flightResponseData[0].price).toEqual(mockJsonFlightData.flights[0].price);
@@ -77,7 +77,7 @@ describe('Test Source2ApiAdapter with mocked node-fetch', () => {
     const errorMessage = 'fake error message';
     // @ts-ignore
     fetch.mockRejectedValue(new Error(errorMessage));
-    const source1ApiAdapterObj = new Source2ApiAdapter();
+    const source1ApiAdapterObj = new SupplyPartner2ApiAdapter();
     const flightResponseDataPromise = source1ApiAdapterObj.getFlightDetails();
     expect(flightResponseDataPromise).rejects.toThrow(errorMessage);
   });
@@ -87,7 +87,7 @@ describe('Test Source2ApiAdapter with mocked node-fetch', () => {
     const mockResponse = new Response(mockResponseText, { status: 401 });
     // @ts-ignore
     fetch.mockReturnValue(Promise.resolve(mockResponse));
-    const source1ApiAdapterObj = new Source2ApiAdapter();
+    const source1ApiAdapterObj = new SupplyPartner2ApiAdapter();
     const flightResponseDataPromise = source1ApiAdapterObj.getFlightDetails();
     expect(flightResponseDataPromise).rejects.toThrow('Invalid response: 401 MOCKERROR');
   });
