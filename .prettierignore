@@ -1,0 +1,4 @@
+**/dist/**/*
+**/coverage/**/*
+**/.cache/**/*
+**/node_modules/**/*
