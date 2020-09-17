@@ -6,7 +6,7 @@ import Source2ApiAdapter from './source2ApiAdapter';
 
 const { Response } = jest.requireActual('node-fetch');
 
-describe('Test Source1ApiAdapter with mocked node-fetch', () => {
+describe('Test Source2ApiAdapter with mocked node-fetch', () => {
   function testSliceData(
     flightResponseDepartureSlice: FlightDetails,
     mockDepartureSlice: {

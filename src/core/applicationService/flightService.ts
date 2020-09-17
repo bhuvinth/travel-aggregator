@@ -25,7 +25,6 @@ export default class FlightService {
       flightData.forEach(flight => {
         const uniqueKey = `${flight.slices.departureJourney.flightNumber}${flight.slices.departureJourney.departureUTC}`;
         if (alreadyExistingJourneyDetails.has(uniqueKey)) {
-          console.log(uniqueKey, flight);
           return;
         }
         flightDataResponse.push(flight);
