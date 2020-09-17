@@ -30,7 +30,7 @@ npm run start
 This would be running based on docker-compose. So please install the docker-compose before running this.
 This would take some time, since it would build the relevant dockers and start the application. 
 
-If you dont want to start the application in docker, then please use command:
+You can also start the application without the Docker, then please use command:
 ```
 npm run dev
 ```
@@ -77,4 +77,4 @@ npm run lint
 
 
 ### Choices & Rationals
-Please find the choices and rationales [here](./choices-and-rationales/README.md)
+Please find the choices and rationales [here](choice-and-rationales/README.md)

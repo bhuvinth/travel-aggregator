@@ -2,7 +2,8 @@
 
 ### Assumption:
 
-I have coded the application with a perspective of upcoming changes i.e. there will be changes like more complex API requirements, more data sources will be upcoming. 
+I have coded the application with a perspective that this is just a first epic of the project. 
+i.e. there will be changes like more complex API requirements, more data sources will be upcoming. 
 
 So there are few more libraries than currently it needs.
 
@@ -14,7 +15,7 @@ It makes our work easy, since it has built in support for *Validation* (with the
 
 #### 2. Implementation of Domain layer
 Generally I prefer doing business rule validations in the Domain layer, having specific domain types, and relevant Value objects. 
-But since, the application currently is fairly very simple, it didn't make sense to another layer of abstraction.
+But since, the application currently is fairly very simple, it didn't make sense to add another layer of abstraction.
 
 #### 3. Code Organization
 I have tried to follow Hexagonal architecture with as specified above doesn't have a domain layer. 
@@ -23,7 +24,7 @@ But let's say if this application's Business domain gets more complex in that ca
 #### 4. Dependency Injections
 In general I use dependency injections for easy modifiability and testability. 
 But since the application is simple enough, right now it didn't make sense to do dependency injections.
-Nevertheless, I have kept the major parts (markdownService) injectable. 
+Nevertheless, I have kept the major parts (FlightService) injectable. 
 So, lets say the application gets more difficult, it is easy to add the Dependency Injection.
 
 #### 5. Automation Testing: 

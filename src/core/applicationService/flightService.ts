@@ -3,10 +3,15 @@
 import { Flights } from '@main/common/dto/flights';
 import Logger from '@main/utils/logger';
 import FlightSourceApiInterface from '../infrastructure/services/flightSourceBridges/flightSourceApiInteface';
+import SupplyPartner1ApiAdapter from '../infrastructure/services/flightSourceBridges/source1Adapter/supplyPartner1ApiAdapter';
 
 export default class FlightService {
-  // eslint-disable-next-line no-empty-function
-  constructor(private flightSources: FlightSourceApiInterface[]) {}
+  constructor(
+    private flightSources: FlightSourceApiInterface[] = [
+      new SupplyPartner1ApiAdapter(),
+      new SupplyPartner1ApiAdapter(),
+    ], // eslint-disable-next-line no-empty-function
+  ) {}
 
   public async getFlightDetailsFromAllSources() {
     const flightData = await this.getDataFromSources();
