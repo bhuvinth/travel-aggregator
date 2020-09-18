@@ -41,7 +41,7 @@ This application is based on ExpressJS.
 
 For using the Service, please use the Postman request at [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/d1479969db36c715980d)
 
-or use the one in the [repository](Flight Service.postman_collection.json).
+or use the exported [Postman collection](FlightService.postman_collection.json)
 
 or you can use the below-given curl request:
 ```
@@ -76,5 +76,5 @@ npm run lint
 ```
 
 
-### Choices & Rationals
+### Choices & Rationales
 Please find the choices and rationales [here](choice-and-rationales/README.md)

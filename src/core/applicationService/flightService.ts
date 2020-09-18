@@ -20,25 +20,27 @@ export default class FlightService {
     return uniqueFlightData;
   }
 
-  private removeFlightDuplicateData(sourceFlightDataArray: Flights[][]): Flights[] {
+  private removeFlightDuplicateData(allFlightDataFromDifferentSources: Flights[][]): Flights[] {
     const alreadyExistingJourneyDetails: Map<string, string> = new Map<string, string>();
     const flightDataResponse: Flights[] = [];
 
-    const notNullFlightDataArray: Flights[][] = sourceFlightDataArray.filter(
+    const notNullFlightData: Flights[][] = allFlightDataFromDifferentSources.filter(
       (flightArray: Flights[]) => flightArray.length,
     );
 
-    notNullFlightDataArray.forEach(flightData => {
+    notNullFlightData.forEach(flightData => {
       flightData.forEach(flight => {
         const uniqueKey = flight.slices
           .map(flightSlice => {
             return `${flightSlice.flightNumber}${flightSlice.departureUTC}`;
           })
           .join(' ');
+
         if (alreadyExistingJourneyDetails.has(uniqueKey)) {
           Logger.debug(`duplicate found ${uniqueKey}`);
           return;
         }
+
         flightDataResponse.push(flight);
         alreadyExistingJourneyDetails.set(uniqueKey, uniqueKey);
       });
