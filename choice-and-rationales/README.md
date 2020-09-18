@@ -28,7 +28,7 @@ Nevertheless, I have kept the major parts (FlightService) injectable.
 So, lets say the application gets more difficult, it is easy to add the Dependency Injection.
 
 #### 5. Automation Testing: 
-I have tried to add tests for the major logical parts of the application.
+I have tried to add unit tests for the major logical parts of the application.
 
 #### 6. Authorization key: 
 Currently, I am reading the Authorization key from the environment variables.
