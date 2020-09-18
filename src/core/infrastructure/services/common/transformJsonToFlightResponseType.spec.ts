@@ -1,33 +1,9 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import transformJsonToFlightResponse from './transformJsonToFlightResponseType';
-import { FlightDetails, Flights } from '../../../../common/dto/flights';
+import { Flights } from '../../../../common/dto/flights';
+import testSliceData from '../testHelpers/helpers';
 
 describe('Test Json To Flight Type Transformer', () => {
-  function testSliceData(
-    flightResponseDepartureSlice: FlightDetails,
-    mockDepartureSlice: {
-      origin_name: string;
-      destination_name: string;
-      departure_date_time_utc: string;
-      arrival_date_time_utc: string;
-      flight_number: string;
-      duration: number;
-    },
-  ) {
-    expect(flightResponseDepartureSlice.arrivalUTC).toEqual(
-      mockDepartureSlice.arrival_date_time_utc,
-    );
-    expect(flightResponseDepartureSlice.departureUTC).toEqual(
-      mockDepartureSlice.departure_date_time_utc,
-    );
-    expect(flightResponseDepartureSlice.destinationName).toEqual(
-      mockDepartureSlice.destination_name,
-    );
-    expect(flightResponseDepartureSlice.durationInMinutes).toEqual(mockDepartureSlice.duration);
-    expect(flightResponseDepartureSlice.flightNumber).toEqual(mockDepartureSlice.flight_number);
-    expect(flightResponseDepartureSlice.originName).toEqual(mockDepartureSlice.origin_name);
-  }
-
   it('Should map valid json to Flight type successfully', async () => {
     const mockJsonFlightData = {
       flights: [
@@ -58,11 +34,11 @@ describe('Test Json To Flight Type Transformer', () => {
     expect(flightResponseData).toBeDefined();
     expect(flightResponseData[0].price).toEqual(mockJsonFlightData.flights[0].price);
 
-    const { departureJourney, returnJourney } = flightResponseData[0].slices;
+    const journeySlices = flightResponseData[0].slices;
     const mockDepartureSlice = mockJsonFlightData.flights[0].slices[0];
-    testSliceData(departureJourney, mockDepartureSlice);
+    testSliceData(journeySlices[0], mockDepartureSlice);
 
     const mockReturnJourneySlice = mockJsonFlightData.flights[0].slices[1];
-    testSliceData(returnJourney, mockReturnJourneySlice);
+    testSliceData(journeySlices[1], mockReturnJourneySlice);
   });
 });

@@ -1,11 +1,38 @@
-import * as winston from 'winston';
+const winston = require('winston');
+
+const { format } = winston;
 
 const conoleLogTransport = new winston.transports.Console();
 
+const enumerateErrorFormat = format((info: any) => {
+  if (info.message instanceof Error) {
+    // eslint-disable-next-line no-param-reassign
+    info.message = Object.assign(
+      {
+        message: info.message.message,
+        stack: info.message.stack,
+      },
+      info.message,
+    );
+  }
+
+  if (info instanceof Error) {
+    return Object.assign(
+      {
+        message: info.message,
+        stack: info.stack,
+      },
+      info,
+    );
+  }
+
+  return info;
+});
+
 const logger = winston.createLogger({
   level: 'debug',
-  format: winston.format.json(),
-  defaultMeta: { service: 'user-service' },
+  format: format.combine(enumerateErrorFormat(), format.json()),
+  defaultMeta: { service: 'flight-service' },
   transports: [conoleLogTransport],
 });
 
@@ -16,20 +43,5 @@ if (process.env.NODE_ENV !== 'production') {
     }),
   );
 }
-export default class Logger {
-  public static info(info: any) {
-    logger.info(info);
-  }
 
-  public static debug(message: any) {
-    logger.debug(message);
-  }
-
-  public static error(err: any) {
-    logger.error(err);
-  }
-
-  public static warning(warning: any) {
-    logger.warn(warning);
-  }
-}
+export default logger;

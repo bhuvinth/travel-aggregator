@@ -5,8 +5,8 @@ import FlightSourceApiInterface from '@main/core/infrastructure/services/flightS
 export const flights: Flights[] = [
   {
     price: 100,
-    slices: {
-      departureJourney: {
+    slices: [
+      {
         arrivalUTC: new Date('2020-01-01T22:00:00'),
         departureUTC: new Date('2020-01-01T20:00:00'),
         destinationName: 'Cagliari',
@@ -14,7 +14,7 @@ export const flights: Flights[] = [
         flightNumber: '255',
         originName: 'Berlin',
       },
-      returnJourney: {
+      {
         arrivalUTC: new Date('2020-01-01T18:00:00'),
         departureUTC: new Date('2020-01-01T16:00:00'),
         destinationName: 'Berlin',
@@ -22,12 +22,12 @@ export const flights: Flights[] = [
         flightNumber: '255',
         originName: 'Cagliari',
       },
-    },
+    ],
   },
   {
     price: 200,
-    slices: {
-      departureJourney: {
+    slices: [
+      {
         arrivalUTC: new Date('2020-01-01T22:00:00'),
         departureUTC: new Date('2020-01-01T19:00:00'),
         destinationName: 'Rejkyavik',
@@ -35,7 +35,7 @@ export const flights: Flights[] = [
         flightNumber: '255',
         originName: 'Berlin',
       },
-      returnJourney: {
+      {
         arrivalUTC: new Date('2020-01-01T19:00:00'),
         departureUTC: new Date('2020-01-01T16:00:00'),
         destinationName: 'Berlin',
@@ -43,7 +43,7 @@ export const flights: Flights[] = [
         flightNumber: '255',
         originName: 'Rejkyavik',
       },
-    },
+    ],
   },
 ];
 export default class FlightSourceApiAdapter implements FlightSourceApiInterface {

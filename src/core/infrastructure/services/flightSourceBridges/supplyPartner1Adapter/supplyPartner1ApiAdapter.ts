@@ -8,9 +8,7 @@ import FlightSourceApiInterface from '../flightSourceApiInteface';
 
 export default class SupplyPartner1ApiAdapter implements FlightSourceApiInterface {
   public getFlightDetails(): Promise<Flights[]> {
-    const authHeaderValue = `Basic ${Buffer.from(
-      `${AppConfig.source1APIConfiguration.username}:${AppConfig.source1APIConfiguration.password}`,
-    ).toString('base64')}`;
+    const authHeaderValue = this.getAuthHeaderValue();
 
     const authHeader = {
       authorization: authHeaderValue,
@@ -19,7 +17,17 @@ export default class SupplyPartner1ApiAdapter implements FlightSourceApiInterfac
       AppConfig.source1APIConfiguration.url,
       authHeader,
       AppConfig.source1APIConfiguration.timeout,
-    ).then(response => this.processResponse(response));
+    )
+      .then(response => this.processResponse(response))
+      .catch((error: Error) => {
+        throw new Error(`${error.message} in SupplyPartner1ApiAdapter`);
+      });
+  }
+
+  private getAuthHeaderValue() {
+    return `Basic ${Buffer.from(
+      `${AppConfig.source2APIConfiguration.username}:${AppConfig.source2APIConfiguration.password}`,
+    ).toString('base64')}`;
   }
 
   private async processResponse(response: Response) {

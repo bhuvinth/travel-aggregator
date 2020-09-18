@@ -4,17 +4,14 @@ import { Flights, FlightDetails } from '@main/common/dto/flights';
 import Logger from '@main/utils/logger';
 
 async function validateFlightResponse(flightData: Flights) {
-  const departureJourneyValidationResult = await validate(flightData.slices.departureJourney);
-  const returnJourneyValidationResult = await validate(flightData.slices.returnJourney);
+  const validationResultPromises = flightData.slices.map(async (flight: FlightDetails) => {
+    return validate(flight);
+  });
+  const validationResults = (await Promise.all(validationResultPromises)).flat();
   const flightResponseValidationResult = await validate(flightData);
-  if (
-    departureJourneyValidationResult.length ||
-    returnJourneyValidationResult.length ||
-    flightResponseValidationResult.length
-  ) {
+  if (validationResults.length || flightResponseValidationResult.length) {
     Logger.error({
-      departureJourneyValidationResult,
-      returnJourneyValidationResult,
+      validationResults,
       flightResponseValidationResult,
     });
     return null;
@@ -27,30 +24,22 @@ export default async function transformJsonToFlightResponse(
   flightsJsonData: any,
 ): Promise<Flights[]> {
   const flightData: Flights[] = flightsJsonData.flights.map(async (flightJsonData: any) => {
-    const [from, to] = flightJsonData.slices;
-
-    const departureJourney = new FlightDetails();
-    departureJourney.arrivalUTC = from.arrival_date_time_utc;
-    departureJourney.departureUTC = from.departure_date_time_utc;
-    departureJourney.destinationName = from.destination_name;
-    departureJourney.durationInMinutes = from.duration;
-    departureJourney.flightNumber = from.flight_number;
-    departureJourney.originName = from.origin_name;
-
-    const returnJourney = new FlightDetails();
-    returnJourney.arrivalUTC = to.arrival_date_time_utc;
-    returnJourney.departureUTC = to.departure_date_time_utc;
-    returnJourney.destinationName = to.destination_name;
-    returnJourney.durationInMinutes = to.duration;
-    returnJourney.flightNumber = to.flight_number;
-    returnJourney.originName = to.origin_name;
+    const flightSlices: FlightDetails[] = flightJsonData.slices.map(
+      (journeySlice: any): FlightDetails => {
+        const journey = new FlightDetails();
+        journey.arrivalUTC = journeySlice.arrival_date_time_utc;
+        journey.departureUTC = journeySlice.departure_date_time_utc;
+        journey.destinationName = journeySlice.destination_name;
+        journey.durationInMinutes = journeySlice.duration;
+        journey.flightNumber = journeySlice.flight_number;
+        journey.originName = journeySlice.origin_name;
+        return journey;
+      },
+    );
 
     const flightResponse = new Flights();
     flightResponse.price = flightJsonData.price;
-    flightResponse.slices = {
-      departureJourney,
-      returnJourney,
-    };
+    flightResponse.slices = flightSlices;
 
     return validateFlightResponse(flightResponse);
   });

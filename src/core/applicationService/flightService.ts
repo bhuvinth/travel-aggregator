@@ -2,14 +2,15 @@
 /* eslint-disable no-useless-constructor */
 import { Flights } from '@main/common/dto/flights';
 import Logger from '@main/utils/logger';
-import FlightSourceApiInterface from '../infrastructure/services/flightSourceBridges/flightSourceApiInteface';
-import SupplyPartner1ApiAdapter from '../infrastructure/services/flightSourceBridges/source1Adapter/supplyPartner1ApiAdapter';
+import FlightSourceApiInterface from '@core/infrastructure/services/flightSourceBridges/flightSourceApiInteface';
+import SupplyPartner1ApiAdapter from '@core/infrastructure/services/flightSourceBridges/supplyPartner1Adapter/supplyPartner1ApiAdapter';
+import SupplyPartner2ApiAdapter from '@main/core/infrastructure/services/flightSourceBridges/supplyPartner2Adapter/supplyPartner2ApiAdapter';
 
 export default class FlightService {
   constructor(
     private flightSources: FlightSourceApiInterface[] = [
       new SupplyPartner1ApiAdapter(),
-      new SupplyPartner1ApiAdapter(),
+      new SupplyPartner2ApiAdapter(),
     ], // eslint-disable-next-line no-empty-function
   ) {}
 
@@ -29,18 +30,17 @@ export default class FlightService {
 
     notNullFlightDataArray.forEach(flightData => {
       flightData.forEach(flight => {
-        const uniqueKey = `${flight.slices.departureJourney.flightNumber}${flight.slices.departureJourney.departureUTC}${flight.slices.returnJourney.flightNumber}${flight.slices.returnJourney.departureUTC}`;
+        const uniqueKey = flight.slices
+          .map(flightSlice => {
+            return `${flightSlice.flightNumber}${flightSlice.departureUTC}`;
+          })
+          .join(' ');
         if (alreadyExistingJourneyDetails.has(uniqueKey)) {
-          Logger.info(
-            `duplicate found ${flight.slices.departureJourney.flightNumber}  ${flight.slices.departureJourney.departureUTC}`,
-          );
+          Logger.debug(`duplicate found ${uniqueKey}`);
           return;
         }
         flightDataResponse.push(flight);
-        alreadyExistingJourneyDetails.set(
-          `${flight.slices.departureJourney.flightNumber}${flight.slices.departureJourney.departureUTC}${flight.slices.returnJourney.flightNumber}${flight.slices.returnJourney.departureUTC}`,
-          `${flight.slices.departureJourney.flightNumber}${flight.slices.departureJourney.arrivalUTC}`,
-        );
+        alreadyExistingJourneyDetails.set(uniqueKey, uniqueKey);
       });
     });
 
@@ -49,7 +49,9 @@ export default class FlightService {
 
   private async getDataFromSources(): Promise<Flights[][]> {
     const dataSourcePromises = this.flightSources.map(flightDataSourceAdaper => {
-      return flightDataSourceAdaper.getFlightDetails().catch(error => {
+      return flightDataSourceAdaper.getFlightDetails().catch((error: Error) => {
+        // eslint-disable-next-line no-debugger
+        debugger;
         Logger.error(error);
         return [] as Flights[];
       });

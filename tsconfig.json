@@ -16,7 +16,7 @@
     "resolveJsonModule": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "lib": ["dom", "es2018", "esnext.asynciterable"],
+    "lib": ["dom", "es2018", "esnext.asynciterable", "ES2019"],
     "typeRoots": ["./node_modules/@types"],
     "paths": {
       "@main/*": ["./*"],

@@ -2,10 +2,7 @@ import { IsDateString, IsNumber, IsString, ValidateNested } from 'class-validato
 
 export class Flights {
   @ValidateNested()
-  slices: {
-    departureJourney: FlightDetails;
-    returnJourney: FlightDetails;
-  };
+  slices: FlightDetails[];
 
   @IsNumber({ allowNaN: false }, { message: 'Invalid Price' })
   price: number;
