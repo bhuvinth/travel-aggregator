@@ -20,45 +20,34 @@ export default class FlightService {
     return uniqueFlightData;
   }
 
-  private removeFlightDuplicateData(allFlightDataFromDifferentSources: Flights[][]): Flights[] {
-    const alreadyExistingJourneyDetails: Map<string, string> = new Map<string, string>();
-    const flightDataResponse: Flights[] = [];
+  private removeFlightDuplicateData(allFlightDataFromDifferentSources: Flights[]): Flights[] {
+    const alreadyExistingJourneyDetails: Map<string, number> = new Map<string, number>();
 
-    const notNullFlightData: Flights[][] = allFlightDataFromDifferentSources.filter(
-      (flightArray: Flights[]) => flightArray.length,
-    );
-
-    notNullFlightData.forEach(flightData => {
-      flightData.forEach(flight => {
-        const uniqueKey = flight.slices
-          .map(flightSlice => {
-            return `${flightSlice.flightNumber}${flightSlice.departureUTC}`;
-          })
-          .join(' ');
-
-        if (alreadyExistingJourneyDetails.has(uniqueKey)) {
-          Logger.debug(`duplicate found ${uniqueKey}`);
-          return;
-        }
-
-        flightDataResponse.push(flight);
-        alreadyExistingJourneyDetails.set(uniqueKey, uniqueKey);
-      });
+    const flightDataResponse = allFlightDataFromDifferentSources.filter((flight, index: number) => {
+      const uniqueKey = flight.slices
+        .map(flightSlice => {
+          return `${flightSlice.flightNumber}${flightSlice.departureUTC}`;
+        })
+        .join(' ');
+      if (alreadyExistingJourneyDetails.has(uniqueKey)) {
+        Logger.debug(`duplicate found ${uniqueKey}`);
+        return false;
+      }
+      alreadyExistingJourneyDetails.set(uniqueKey, index);
+      return true;
     });
-
     return flightDataResponse;
   }
 
-  private async getDataFromSources(): Promise<Flights[][]> {
+  private async getDataFromSources(): Promise<Flights[]> {
     const dataSourcePromises = this.flightSources.map(flightDataSourceAdaper => {
       return flightDataSourceAdaper.getFlightDetails().catch((error: Error) => {
-        // eslint-disable-next-line no-debugger
-        debugger;
         Logger.error(error);
         return [] as Flights[];
       });
     });
     const flightDataFromSources = await Promise.all(dataSourcePromises);
-    return flightDataFromSources;
+
+    return flightDataFromSources.flat();
   }
 }
