@@ -22,7 +22,8 @@
       "@main/*": ["./*"],
       "@config/*": ["config/*"],
       "@core/*": ["core/*"],
-      "@utils/*": ["core/utils/*"]
+      "@utils/*": ["core/utils/*"],
+      "@infrastructure/*":["core/infrastructure/*"]
     }
   },
   "exclude": ["node_modules", "**/*.test.ts", "**/*.spec.ts"],

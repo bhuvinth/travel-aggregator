@@ -1,8 +1,8 @@
 /* eslint-disable class-methods-use-this */
 import { Flights } from '@main/common/dto/flights';
 import AppConfig from '@main/config/appConfig';
-import callAPIWithTimeout from '../../common/callApiWithTimeout';
-import transformJsonToFlightResponse from '../../common/transformJsonToFlightResponseType';
+import callAPIWithTimeout from '@infrastructure/services/common/callApiWithTimeout';
+import transformJsonToFlightResponse from '@infrastructure/services/common/transformJsonToFlightResponseType';
 import FlightSourceApiInterface from '../flightSourceApiInteface';
 
 export default class SupplyPartner2ApiAdapter implements FlightSourceApiInterface {
