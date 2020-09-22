@@ -20,6 +20,7 @@ export default class SupplyPartner1ApiAdapter implements FlightSourceApiInterfac
     )
       .then(response => this.processResponse(response))
       .catch((error: Error) => {
+        // I have added this catch here for verbosity in the Error messages, which are easy to search and track.
         throw new Error(`${error.message} in SupplyPartner1ApiAdapter`);
       });
   }
