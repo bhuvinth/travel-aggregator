@@ -28,7 +28,7 @@ Finally you can start the application server:
 npm run start
 ```
 This would be running based on docker-compose. So please install the docker-compose before running this.
-This would take some time, since it would build the relevant dockers and start the application. 
+This might take some time, since it would build the relevant dockers and start the application. 
 
 You can also start the application without the Docker, then please use command:
 ```
